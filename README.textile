@@ -1,0 +1,17 @@
+h1. clj-lfsr
+
+"Linear Feedback Shift Register":http://en.wikipedia.org/wiki/LFSR
+
+Wkipedia describes LFSRs as:
+
+bq. A linear feedback shift register (LFSR) is a shift register whose input bit is a linear function of its previous state.
+
+There is an interesting class of LFSRs that have maximal length, the article calls these "m-sequences":http://en.wikipedia.org/wiki/Maximum_length_sequence.  The interesting property is that for a given width, they produce all possible combinations, once and only once.  This means they will enumerate all the possible values, but not in an easily identifiable sequence.
+
+h1. Usage
+
+h1. Installation
+
+h1. License
+
+"Same as Clojure":http://clojure.org/license
