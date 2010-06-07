@@ -6,24 +6,99 @@ Wkipedia describes LFSRs as:
 
 bq. A linear feedback shift register (LFSR) is a shift register whose input bit is a linear function of its previous state.
 
-There is an interesting class of LFSRs that have maximal length, the article calls these "m-sequences":http://en.wikipedia.org/wiki/Maximum_length_sequence.  The interesting property is that for a given width, they produce all possible combinations, once and only once.  This means they will enumerate all the possible values, but not in an easily identifiable sequence.
+It describes their uses as:
+
+b1. Applications of LFSRs include generating pseudo-random numbers, pseudo-noise sequences, fast digital counters, and whitening sequences. Both hardware and software implementations of LFSRs are common.
+
+That article also goes on to explain that there is an interesting class of LFSRs that have maximal length, it calls these "m-sequences":http://en.wikipedia.org/wiki/Maximum_length_sequence.  The interesting property is that for a given width (number of bits), they produce all possible permutations of bits, once and only once.  This means they will enumerate all the possible values, but not in a monoically increasing sequence (eg: 1, 2, 3, ..., n).
+
+Thus they can be used for situations where you want what looks like a random selection, but is in fact an enumeration: like selecting identifiers.  An example would be assigning ids for users on your website.
 
 h1. Usage
 
 <pre>
-(ns testme
-  (:require [clj-lfsr.core :as lfsr]))
+(ns test
+  (:require
+   [clj-lfsr.core :as lfsr]))
 
-(map :state (core/lfsr-seq 4 [4 3]))
-;; => (4 2 1 12 6 3 13 10 5 14 7 15 11 9 8)
+
+(def *lfsr*
+     (atom
+      (let [lfsr-cfg (clj-lfsr.taps/lfsr-for-bit-size 34 4)]
+        (lfsr/lfsr
+         1
+         (:taps lfsr-cfg)))))
+
+(defn next-id []
+  (reset! *lfsr* (lfsr/next-lfsr @*lfsr*))
+  (:state @*lfsr*))
+
+(defn next-id-hex []
+  (let [id (str (apply str (repeat 10 "0")) (.toString (next-id) 16))]
+    (str "ID" (.substring id (- (count id) 10) (count id)))))
+
+(dotimes [ii 10]
+  (printf "next id=%s\n" (next-id-hex)))
+
+;; =>
+;; next id=ID00a3000000
+;; next id=ID0051800000
+;; next id=ID0028c00000
+;; next id=ID0014600000
+;; next id=ID000a300000
+;; next id=ID0005180000
+;; next id=ID00028c0000
+;; next id=ID0001460000
+;; next id=ID0000a30000
+;; next id=ID0000518000
 
 </pre>
 
+Since an LFSR's next state is entirely dependent on only its current state, it is possible to create an LFSR (your ID generator), commit it to persistent storage until it ins needed, re-initialize your LSFR with the previous state and continue to use it.
+
+The only drawback from this perspective is that a single LFSR can not be used concurrently or in a distributed manner.
+
 h1. Taps
 
-@clj-lfsr.taps@ contains a data set of bit sizes and taps for m-sequences.
+@clj-lfsr.taps@ contains a data set of bit sizes and taps for several known maximal sequence LFSRs.  These were obtained from the wikipedia article and provide a convienient starting point for your own LSFRs.
 
 h1. Installation
+
+If you're using Leiningen, add the following to your @project.clj@ file's @:dependencies@:
+
+<pre>
+  [com.github.kyleburton/clj-lfsr "1.0.0"]
+</pre>
+
+For maven:
+
+<pre>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.kyleburton</groupId>
+      <artifactId>clj-lfsr</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    ...
+  </dependencies>
+</pre>
+
+h2. Building
+
+To build using Leiningen:
+
+<pre>
+  clj-lfsr$ lein test
+  clj-lfsr$ lein jar
+  clj-lfsr$ lein uberjar
+</pre>
+
+h1. References
+
+* "Linear Feedback Shift Register":http://en.wikipedia.org/wiki/LFSR
+* "Linear Feedback Shift Registers":http://www.newwaveinstruments.com/resources/articles/m_sequence_linear_feedback_shift_register_lfsr.htm
+* "Linear Feedback Shift Registers":http://homepage.mac.com/afj/lfsr.html
+* "Gray Codes":http://en.wikipedia.org/wiki/Gray_code
 
 h1. License
 

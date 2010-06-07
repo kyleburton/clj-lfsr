@@ -1129,13 +1129,8 @@
 
 (defn lfsr-for-bit-size [lfsr-size nbits]
   "lfsr-size is the number of taps, nbits is the desired bit width of the LFSR."
-  (first (filter (fn [lfsr]
-                   (and
-                    (= lfsr-size (:lfsr-size lfsr))
-                    (= nbits (:nbits lfsr))))
-                 *maximal-length-taps*)))
+  (first (filter #(and (= 4 (:lfsr-size %)) (= 32 (:nbits %))) *maximal-length-taps*)))
 
-;; (lfsr-for-bit-size 999)
 
 (comment
   (require 'clojure.contrib.str-utils)
