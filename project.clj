@@ -1,4 +1,4 @@
-(defproject com.github.kyleburton/clj-lfsr "1.0.0-SNAPSHOT"
+(defproject com.github.kyleburton/clj-lfsr "1.0.0"
   :description "LFSR Library"
   :warn-on-reflection true
   :dependencies

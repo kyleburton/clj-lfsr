@@ -2,7 +2,7 @@ h1. clj-lfsr
 
 "Linear Feedback Shift Register":http://en.wikipedia.org/wiki/LFSR library for "Clojure":http://clojure.org/.
 
-Wkipedia describes LFSRs as:
+Wikipedia describes LFSRs as:
 
 bq. A linear feedback shift register (LFSR) is a shift register whose input bit is a linear function of its previous state.
 
@@ -10,11 +10,13 @@ It describes their uses as:
 
 bq. Applications of LFSRs include generating pseudo-random numbers, pseudo-noise sequences, fast digital counters, and whitening sequences.
 
-The article also goes on to explain that there is an interesting class of LFSRs that have maximal length, it calls these "m-sequences":http://en.wikipedia.org/wiki/Maximum_length_sequence.  The interesting property is that for a given width (number of bits), the set of taps produces all possible permutations of bits, once and only once.  This means they will enumerate all the possible values, but not in a monoically increasing sequence (eg: 1, 2, 3, ..., n).
+The article also goes on to explain that there is an interesting class of LFSRs that have maximal length, called "m-sequences":http://en.wikipedia.org/wiki/Maximum_length_sequence.  The interesting property is that for a given width (number of bits), the set of taps produces all possible permutations of bits, once and only once.  This means they will enumerate all the possible bit permutations (with the exception of all zeros), though not in a monotonically increasing sequence (eg: 1, 2, 3, ..., n).
 
 Thus they can be used for situations where you want what looks like a random sequence, but is in fact an enumeration.  An example would be assigning ids for users on your website by enumerating identifiers using the LFSR.
 
 h1. Usage
+
+You can find this script in @examples/test.clj@:
 
 <pre>
 (ns test
@@ -39,27 +41,30 @@ h1. Usage
 (dotimes [ii 10]
   (printf "next id=%s\n" (next-id-hex)))
 
-;; =>
-;; next id=ID00a3000000
-;; next id=ID0051800000
-;; next id=ID0028c00000
-;; next id=ID0014600000
-;; next id=ID000a300000
-;; next id=ID0005180000
-;; next id=ID00028c0000
-;; next id=ID0001460000
-;; next id=ID0000a30000
-;; next id=ID0000518000
-
 </pre>
 
-Since an LFSR's next state is entirely dependent on only its current state, it is possible to create an LFSR (your ID generator), commit it to persistent storage until it ins needed, re-initialize your LSFR with the previous state and continue to use it.
+It produces the following output
 
-The only drawback from this perspective is that a single LFSR can not be used concurrently or in a distributed manner.
+<pre>
+next id=ID00a3000000
+next id=ID0051800000
+next id=ID0028c00000
+next id=ID0014600000
+next id=ID000a300000
+next id=ID0005180000
+next id=ID00028c0000
+next id=ID0001460000
+next id=ID0000a30000
+next id=ID0000518000
+</pre>
 
-h1. Taps
+An LFSR's next state is entirely dependent on only its current state, it is possible to create an LFSR (your ID generator), commit it to persistent storage until it's needed, re-initialize your LFSR with the previous state and continue enumerating from it.
 
-@clj-lfsr.taps@ contains a data set of bit sizes and taps for several known maximal sequence LFSRs.  These were obtained from the wikipedia article and provide a convienient starting point for your own LSFRs.
+The only drawback from this perspective is that a single LFSR can not be used concurrently or in a distributed manner, then again it's easy enough to add a prefix or use separate LFSRs.
+
+h1. Taps Database
+
+@clj-lfsr.taps@ contains a data set of bit sizes and taps for several known maximal sequence LFSRs.  These were obtained from the Wikipedia article and provide a convenient starting point for your own LFSRs.
 
 h1. Installation
 
