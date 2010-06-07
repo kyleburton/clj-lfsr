@@ -1,6 +1,6 @@
 h1. clj-lfsr
 
-"Linear Feedback Shift Register":http://en.wikipedia.org/wiki/LFSR
+"Linear Feedback Shift Register":http://en.wikipedia.org/wiki/LFSR library for "Clojure":http://clojure.org/.
 
 Wkipedia describes LFSRs as:
 
@@ -8,11 +8,11 @@ bq. A linear feedback shift register (LFSR) is a shift register whose input bit 
 
 It describes their uses as:
 
-b1. Applications of LFSRs include generating pseudo-random numbers, pseudo-noise sequences, fast digital counters, and whitening sequences. Both hardware and software implementations of LFSRs are common.
+bq. Applications of LFSRs include generating pseudo-random numbers, pseudo-noise sequences, fast digital counters, and whitening sequences.
 
-That article also goes on to explain that there is an interesting class of LFSRs that have maximal length, it calls these "m-sequences":http://en.wikipedia.org/wiki/Maximum_length_sequence.  The interesting property is that for a given width (number of bits), they produce all possible permutations of bits, once and only once.  This means they will enumerate all the possible values, but not in a monoically increasing sequence (eg: 1, 2, 3, ..., n).
+The article also goes on to explain that there is an interesting class of LFSRs that have maximal length, it calls these "m-sequences":http://en.wikipedia.org/wiki/Maximum_length_sequence.  The interesting property is that for a given width (number of bits), the set of taps produces all possible permutations of bits, once and only once.  This means they will enumerate all the possible values, but not in a monoically increasing sequence (eg: 1, 2, 3, ..., n).
 
-Thus they can be used for situations where you want what looks like a random selection, but is in fact an enumeration: like selecting identifiers.  An example would be assigning ids for users on your website.
+Thus they can be used for situations where you want what looks like a random sequence, but is in fact an enumeration.  An example would be assigning ids for users on your website by enumerating identifiers using the LFSR.
 
 h1. Usage
 
@@ -20,7 +20,6 @@ h1. Usage
 (ns test
   (:require
    [clj-lfsr.core :as lfsr]))
-
 
 (def *lfsr*
      (atom

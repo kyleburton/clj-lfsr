@@ -1,5 +1,5 @@
-(ns clj-lfsr.core-test
-  (:require [clj-lfsr.core :as core])
+(ns com.github.kyleburton.clj-lfsr.core-test
+  (:require [com.github.kyleburton.clj-lfsr.core :as core])
   (:use clojure.test))
 
 ;; > bash run-simple.sh -L info -s -S "4 [4 3]"

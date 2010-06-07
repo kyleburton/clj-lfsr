@@ -1,6 +1,6 @@
-(ns clj-lfsr.taps-test
+(ns com.github.kyleburton.clj-lfsr.taps-test
   (:require
-   [clj-lfsr.taps :as lfsr-taps])
+   [com.github.kyleburton.clj-lfsr.taps :as lfsr-taps])
   (:use [clojure.test]))
 
 (deftest should-get-bit-size
@@ -15,3 +15,4 @@
 
 
 
+;; (should-get-bit-size)

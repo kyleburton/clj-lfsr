@@ -1,11 +1,12 @@
 (ns test
   (:require
-   [clj-lfsr.core :as lfsr]))
+   [com.github.kyleburton.clj-lfsr.core :as lfsr]
+   [com.github.kyleburton.clj-lfsr.taps :as taps]))
 
 
 (def *lfsr*
      (atom
-      (let [lfsr-cfg (clj-lfsr.taps/lfsr-for-bit-size 34 4)]
+      (let [lfsr-cfg (taps/lfsr-for-bit-size 34 4)]
         (lfsr/lfsr
          1
          (:taps lfsr-cfg)))))

@@ -1,4 +1,4 @@
-(ns clj-lfsr.taps)
+(ns com.github.kyleburton.clj-lfsr.taps)
 
 ;; Derived from:
 ;;   http://en.wikipedia.org/wiki/LFSR
@@ -1129,7 +1129,7 @@
 
 (defn lfsr-for-bit-size [lfsr-size nbits]
   "lfsr-size is the number of taps, nbits is the desired bit width of the LFSR."
-  (first (filter #(and (= 4 (:lfsr-size %)) (= 32 (:nbits %))) *maximal-length-taps*)))
+  (first (filter #(and (= lfsr-size (:lfsr-size %)) (= nbits (:nbits %))) *maximal-length-taps*)))
 
 
 (comment
