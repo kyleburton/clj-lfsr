@@ -37,6 +37,7 @@
 (deftest test-lfsr-seq
   (is (= *lfsr-4-4_3* (map :state (core/lfsr-seq 1 [4 3])))))
 
+;; (take 3 (core/lfsr-seq 321 [321 319 316 314]))
 ;; (deftest test-lfsr-seq!
 ;;   (is (thrown? IllegalStateException
 ;;                (take 100 (core/lfsr-seq! 1 [4 3])))))
