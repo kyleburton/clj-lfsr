@@ -1,64 +1,74 @@
-(ns clj-lfsr.core)
+(ns clj-lfsr.core
+  (import [java.math BigInteger]))
 
-;; (clj-lfsr.taps/lfsr-for-bit-size 4 32) {:lfsr-size 4, :nbits 32, :taps [32 30 26 25]}
+;; TODO: looks like BigInteger can do all the operations we want/need
+;; ditch the bitset and just use BigInteger
+;; NB: byte-positions start at 1 not 0
+(defn make-mask [byte-positions]
+  (reduce #(.setBit %1 (dec %2))
+          (BigInteger. "0")
+          byte-positions))
 
-(let [intmask (dec (bit-shift-left 1 32))]
-  (defmacro ushr [x n] `(int (bit-shift-right (bit-and ~intmask ~x) ~n))))
+;; (class (make-mask [0 1 2]))
 
+;; TODO: assert that start is an int or bigint...
+(defn lfsr [start taps]
+  {:start      (BigInteger. (.toString start))
+   :state      (BigInteger. (.toString start))
+   :taps       taps
+   :mask       (make-mask taps)
+   :exhausted  false
+   :period     0})
 
-;; (Integer/toString (ushr 3 1) 2)
-;; (Integer/toString (bit-shift-left 3 1) 2)
+;;    lfsr = (lfsr >> one) ^ ((zero - (lfsr & one)) & tap_mask);
+(defn next-state [lfsr]
+  (let [state (:state lfsr)
+        rshift (.shiftRight state 1)
+        lowbit (.and BigInteger/ONE state)
+        invert (.subtract BigInteger/ZERO lowbit)]
+    (.xor rshift
+          (.and invert
+                (:mask lfsr)))))
 
-(defn make-mask [taps]
-  (reduce (fn [newval tap]
-            (bit-set newval (- tap 1)))
-          1
-          taps))
+(defn next-lfsr [lfsr]
+  (let [next (next-state lfsr)]
+    (if (= next (:start lfsr))
+      (assoc lfsr :exhausted true)
+      (assoc lfsr
+        :period (inc (:period lfsr))
+        :state next))))
 
+; (next-lfsr (lfsr 1 [4 3]))
+; (lfsr 1 [4 3])
+; (next-state (lfsr 1 [4 3]))
+; (next-lfsr (next-lfsr (next-lfsr (lfsr 1 [4 3]))))
 
-(defn lfsr4 [nbits]
-  (if-let [lfsr (clj-lfsr.taps/lfsr-for-bit-size 4 nbits)]
-    {:nbits nbits
-     :taps (:taps lfsr)
-     :mask (make-mask (:taps lfsr))
-     :state (atom 1)
-     :period (atom 1)}
-    (throw (IllegalArgumentException. (format "Error: no lfsr4 for nbits: %s" nbits)))))
+(defn lfsr-lazy-seq [lfsr]
+  (if (:exhausted lfsr)
+    nil
+    (lazy-seq
+      (cons
+       lfsr
+       (lfsr-lazy-seq (next-lfsr lfsr))))))
 
-;; 0xd0000001 3489660929
-;; (make-mask [32 31 29])    3489660929
-;; (make-mask [32 31 29 25]) 3506438145
-;; (Long/parseLong
-;; (lfsr4 32) {:nbits 32, :taps [32 30 26 25], :mask 2734686209, :state #<Atom@5f0e0edb: 1>, :period #<Atom@13f17c9e: 1>}
-;; (Long/toString (:mask (lfsr4 32)) 16)
+(defn lfsr-lazy-seq! [lfsr]
+  (if (:exhausted lfsr)
+    (throw (IllegalStateException. (format "Error: lfsr sequence exhausted at %s" lfsr)))
+    (lazy-seq
+      (cons
+       lfsr
+       (lfsr-lazy-seq! (next-lfsr lfsr))))))
 
-(comment
+(defn lfsr-seq [start taps]
+  (lfsr-lazy-seq (lfsr start taps)))
 
-;; unsigned lfsr = 1;
-;; unsigned period = 0;
+(defn lfsr-seq! [start taps]
+  (lfsr-lazy-seq! (lfsr start taps)))
 
-;; do {
-;;   /* taps: 32 31 29 1; characteristic polynomial: x^32 + x^31 + x^29 + x + 1 */
-;;   lfsr = (lfsr >> 1) ^ (unsigned int)(0 - (lfsr & 1u) & 0xd0000001u);
-;;   ++period;
-;; } while(lfsr != 1u);
+;; (next-lfsr (nth (lfsr-seq 1 [4 3]) 14))
+;; (map :state (take 15 (lfsr-seq 1 [4 3])))
+;; (map :state (take 16 (lfsr-seq 1 [4 3])))
+;; (map :state (take 18 (lfsr-seq 1 [4 3])))
+;; (map :state (take 999 (lfsr-seq 1 [4 3])))
+;; (map :state (take 16 (lfsr-seq! 1 [4 3])))
 
-)
-
-(defn nextval [lfsr]
-  (let [state     @(:state lfsr)
-        new-state (bit-xor
-                   (ushr state 1)
-                   (bit-and (- 0 (bit-and state 1))
-                            (:mask lfsr)))]
-    (reset! (:period lfsr)
-            (inc @(:period lfsr)))
-    (reset! (:state lfsr)
-            new-state)
-    new-state))
-
-(comment
-
-(def *foo* (lfsr4 32))
-(map (fn [x] (nextval *foo*)) (range 10))
-)
