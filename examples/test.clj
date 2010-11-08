@@ -19,5 +19,6 @@
   (let [id (str (apply str (repeat 10 "0")) (.toString (next-id) 16))]
     (str "ID" (.substring id (- (count id) 10) (count id)))))
 
-(dotimes [ii 10]
-  (printf "next id=%s\n" (next-id-hex)))
+(dorun
+  (dotimes [ii 10]
+    (printf "next id=%s\n" (next-id-hex))))
