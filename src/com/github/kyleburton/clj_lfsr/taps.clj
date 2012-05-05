@@ -6,7 +6,7 @@
 ;; See also: $project/util/gen-taps.rb
 
 ;; NB: there may be multiple sets of taps for a maximal cycle (2^n - 1) LFSR, these are just one set...
-(def *maximal-length-taps* [
+(def maximal-length-taps [
   {:lfsr-size 2 :nbits 2 :taps [2 1]}
   {:lfsr-size 2 :nbits 3 :taps [3 2]}
   {:lfsr-size 2 :nbits 4 :taps [4 3]}
@@ -1129,7 +1129,7 @@
 
 (defn lfsr-for-bit-size [lfsr-size nbits]
   "lfsr-size is the number of taps, nbits is the desired bit width of the LFSR."
-  (first (filter #(and (= lfsr-size (:lfsr-size %)) (= nbits (:nbits %))) *maximal-length-taps*)))
+  (first (filter #(and (= lfsr-size (:lfsr-size %)) (= nbits (:nbits %))) maximal-length-taps)))
 
 
 (comment
@@ -1140,7 +1140,7 @@
            (map (fn [m]
                   (format "  \"%s %s\","
                           (:nbits m)
-                          (:taps m))) *maximal-length-taps*)))
+                          (:taps m))) maximal-length-taps)))
 
 
 )
