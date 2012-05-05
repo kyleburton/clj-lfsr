@@ -1,6 +1,8 @@
 (ns com.github.kyleburton.clj-lfsr.core
   (import [java.math BigInteger]))
 
+
+
 ;; TODO: looks like BigInteger can do all the operations we want/need
 ;; ditch the bitset and just use BigInteger
 ;; NB: byte-positions start at 1 not 0
