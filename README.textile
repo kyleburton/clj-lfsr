@@ -1,5 +1,9 @@
 h1. clj-lfsr
 
+This branch is for Clojure 1.2 support.  All clj-lfsr versions released from this branch shall have a 1.0.x version numbering scheme. Clojure 1.3 support will be on the master branch.
+
+h1. Overview
+
 "Linear Feedback Shift Register":http://en.wikipedia.org/wiki/LFSR library for "Clojure":http://clojure.org/.
 
 Wikipedia describes LFSRs as:
