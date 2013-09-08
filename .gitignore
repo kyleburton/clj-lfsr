@@ -4,3 +4,6 @@ lib
 classes
 README.html
 .lein-deps-sum
+out.txt
+.lein-failures
+target/
