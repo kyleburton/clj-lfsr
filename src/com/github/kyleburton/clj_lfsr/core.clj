@@ -7,7 +7,7 @@
 ;; ditch the bitset and just use BigInteger
 ;; NB: byte-positions start at 1 not 0
 (defn make-mask [byte-positions]
-  (reduce #(.setBit %1 (dec %2))
+  (reduce #(.setBit ^BigInteger %1 (dec %2))
           (BigInteger. "0")
           byte-positions))
 
@@ -15,8 +15,8 @@
 
 ;; TODO: assert that start is an int or bigint...
 (defn lfsr [start taps]
-  {:start      (BigInteger. (.toString start))
-   :state      (BigInteger. (.toString start))
+  {:start      (BigInteger. (.toString ^Number start))
+   :state      (BigInteger. (.toString ^Number start))
    :taps       taps
    :mask       (make-mask taps)
    :exhausted  false
@@ -24,7 +24,7 @@
 
 ;;    lfsr = (lfsr >> one) ^ ((zero - (lfsr & one)) & tap_mask);
 (defn next-state [lfsr]
-  (let [state (:state lfsr)
+  (let [^BigInteger state  (:state lfsr)
         rshift (.shiftRight state 1)
         lowbit (.and BigInteger/ONE state)
         invert (.subtract BigInteger/ZERO lowbit)]

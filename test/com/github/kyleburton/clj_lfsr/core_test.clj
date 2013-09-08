@@ -22,7 +22,7 @@
 ;; [4]                    2 : 0010                   14
 ;; [4]                    1 : 0001                   15
 ;; [4]                    1 : 0001 END
-(def *lfsr-4-4_3* [1 12 6 3 13 10 5 14 7 15 11 9 8 4 2])
+(def lfsr-4-4_3 [1 12 6 3 13 10 5 14 7 15 11 9 8 4 2])
 
 (deftest test-make-mask
   (is (=         0x0 (core/make-mask [])))
@@ -35,7 +35,7 @@
 
 
 (deftest test-lfsr-seq
-  (is (= *lfsr-4-4_3* (map :state (core/lfsr-seq 1 [4 3])))))
+  (is (= lfsr-4-4_3 (map :state (core/lfsr-seq 1 [4 3])))))
 
 ;; (take 3 (core/lfsr-seq 321 [321 319 316 314]))
 ;; (deftest test-lfsr-seq!

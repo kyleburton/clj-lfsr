@@ -1,7 +1,6 @@
 (defproject com.github.kyleburton/clj-lfsr "1.3.1"
   :description        "LFSR Library"
   :url                "http://github.com/kyleburton/clj-lfsr"
-  :warn-on-reflection true
   :lein-release         {:deploy-via :clojars}
   :license              {:name "Eclipse Public License - v 1.0"
                          :url "http://www.eclipse.org/legal/epl-v10.html"
