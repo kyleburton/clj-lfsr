@@ -1,4 +1,4 @@
-(defproject com.github.kyleburton/clj-lfsr "1.3.2-SNAPSHOT"
+(defproject com.github.kyleburton/clj-lfsr "1.3.2"
   :description        "LFSR Library"
   :url                "http://github.com/kyleburton/clj-lfsr"
   :lein-release         {:deploy-via :clojars}
