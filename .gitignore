@@ -7,3 +7,6 @@ README.html
 out.txt
 .lein-failures
 target/
+.lein-repl-history
+.nrepl-port
+*~
