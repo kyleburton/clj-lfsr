@@ -1,5 +1,5 @@
 (ns com.github.kyleburton.clj-lfsr.core
-  (import [java.math BigInteger]))
+  (:import [java.math BigInteger]))
 
 
 

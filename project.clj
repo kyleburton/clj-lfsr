@@ -10,4 +10,4 @@
                  ["snapshots" {:url "https://clojars.org/repo" :creds :gpg}]]
   :local-repo-classpath true
   :global-vars          {*warn-on-reflection* true}
-  :dependencies         [])
+  :dependencies         [[org.clojure/clojure                    "1.8.0"]])
