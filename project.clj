@@ -1,4 +1,4 @@
-(defproject com.github.kyleburton/clj-lfsr "1.3.3"
+(defproject com.github.kyleburton/clj-lfsr "1.3.4-SNAPSHOT"
   :description        "LFSR Library"
   :url                "http://github.com/kyleburton/clj-lfsr"
   :license              {:name "Eclipse Public License - v 1.0"
