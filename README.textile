@@ -25,11 +25,11 @@ You can find this script in @examples/test.clj@:
 <pre>
 (ns test
   (:require
-   [clj-lfsr.core :as lfsr]))
+   [com.github.kyleburton.clj-lfsr.core :as lfsr]))
 
 (def *lfsr*
      (atom
-      (let [lfsr-cfg (clj-lfsr.taps/lfsr-for-bit-size 34 4)]
+      (let [lfsr-cfg (com.github.kyleburton.clj-lfsr.taps/lfsr-for-bit-size 34 4)]
         (lfsr/lfsr
          1
          (:taps lfsr-cfg)))))
@@ -68,7 +68,7 @@ The only drawback from this perspective is that a single LFSR can not be used co
 
 h1. Taps Database
 
-@clj-lfsr.taps@ contains a data set of bit sizes and taps for several known maximal sequence LFSRs.  These were obtained from the Wikipedia article and provide a convenient starting point for your own LFSRs.
+@com.github.kyleburton.clj-lfsr.taps@ contains a data set of bit sizes and taps for several known maximal sequence LFSRs.  These were obtained from the Wikipedia article and provide a convenient starting point for your own LFSRs.
 
 h1. Installation
 
